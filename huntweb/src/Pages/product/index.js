@@ -1,9 +1,35 @@
 import React, { Component } from 'react';
+import api from '../../Services/api';
+
+import './style.css';
 
 export default class Product extends Component {
+    state = {
+        product: {}
+    };
+
+    async componentDidMount() {
+        // UTILIZANDO DESESTRUTURAÇÃO PARA ACESSAR O PARÂMETRO "ID" QUE ESTÁ NA ROTA.
+        const { id } = this.props.match.params;
+
+        const response = await api.get(`products/${id}`);
+
+        this.setState({product: response.data});
+    }
+
     render() {
+        // PEGANDO O PRODUTO DO ESTADO(STATE).
+        const { product } = this.state;
+
         return (
-            <h1>Product</h1>
-        )
+            <div className="product-info">
+                <h1>{product.title}</h1>
+                <p>{product.description}</p>
+
+                <p>
+                    URL: <a href={product.url}>{product.url}</a>
+                </p>
+            </div>
+        );
     }
 }
