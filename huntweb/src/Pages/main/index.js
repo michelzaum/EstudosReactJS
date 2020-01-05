@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import api from '../../Services/api';
+import { Link } from 'react-router-dom';
+
 import './style.css';
 
 export default class Main extends Component {
@@ -17,6 +19,8 @@ export default class Main extends Component {
     loadProducts = async (page = 1) => {
         const response = await api.get(`/products?page=${page}`);
 
+        //docs = DADOS DOS PRODUTOS.
+        //productInfo = TODO O RESTO DE DADOS QUE SÃO TRAZIDOS DA API.
         const { docs, ...productInfo } = response.data;
 
         //ALTERANDO O ESTADO DA VARIAVEL PRODUCTS.
@@ -26,22 +30,28 @@ export default class Main extends Component {
     };
 
     prevPage = () => {
-        const { page, productInfo } = this.state;
+        const { page } = this.state;
 
+        //SE ESTIVER NA PRIMEIRA PÁGINA, NÃO FAZ NADA.
         if(page === 1) return;
 
+        //SE NÃO, ATRIBUI O NÚMERO DA PÁGINA COM O VALOR DA PÁGINA ATUAL MENOS 1.
         const pageNumber = page - 1;
 
+        // RECARREGA OS PRODUTOS PASSANDO O NÚMERO DA PÁGINA QUE SERÁ EXIBIDA.
         this.loadProducts(pageNumber)
     }
 
     nextPage = () => {
         const { page, productInfo } = this.state;
 
+        // SE FOR A ULTIMA PÁGINA, NÃO FAZ NADA.
         if(page === productInfo.pages) return;
 
+        // SE NÃO, ATRIBUI O NÚMERO DA PÁGINA COM O VALOR DA PÁGINA ATUAL MAIS 1.
         const pageNumber = page + 1;
 
+        // RECARREGA OS PRODUTOS PASSANDO O NÚMERO DA PÁGINA QUE SERÁ EXIBIDA.
         this.loadProducts(pageNumber);
     }
 
@@ -55,7 +65,7 @@ export default class Main extends Component {
                         <strong>{product.title}</strong>
                         <p>{product.description}</p>
 
-                        <a href="">Acessar</a>
+                        <Link to={`/products/${product._id}`}>Acessar</Link>
                     </article>
                 ))}
                 <div className="action">
